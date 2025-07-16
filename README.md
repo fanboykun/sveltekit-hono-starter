@@ -1,38 +1,112 @@
-# sv
+# Sveltekit - Hono StarterKit
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+A modern starter kit that combines SvelteKit with Hono, featuring a robust RPC client API interface that wraps RPC responses as state.
 
-## Creating a project
+## Features
 
-If you're seeing this, you've probably already done this step. Congrats!
+- 🚀 **SvelteKit Integration**: Built on top of SvelteKit for modern, performant web applications
+- 🌐 **Hono Backend**: Utilizes Hono framework for fast and efficient server-side logic
+- 🔄 **Stateful RPC**: Advanced RPC client implementation that wraps responses as state
+- 🛠️ **TypeScript Support**: Full TypeScript integration for type safety
 
-```bash
-# create a new project in the current directory
-npx sv create
+## Project Structure
 
-# create a new project in my-app
-npx sv create my-app
+```
+src/
+├── app.d.ts         # TypeScript declarations
+├── lib/
+│   ├── components/  # Reusable Svelte components
+│   │   └── suspense.svelte  # Suspense component for RPC state management
+│   ├── global/      # Global utilities and configurations
+│   │   └── rpc/     # RPC client implementation
+│   │       └── call-rpc.svelte  # RPC client implementation that wraps RPC responses as state
+│   │       └── create-rpc-client.ts  # RPC client factory
+│   └── server/      # Server-side implementation
+│       ├── middleware/  # Hono middleware
+│       └── procedure/   # RPC procedures
+├── routes/          # SvelteKit routes
+└── static/          # Static assets
 ```
 
-## Developing
+## RPC Client API
 
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
+The project includes a powerful RPC client implementation that:
 
-```bash
-npm run dev
+1. Wraps RPC responses as state
+2. Provides type-safe interfaces
+3. Handles error states and loading states automatically
+4. Supports both synchronous and asynchronous operations
 
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+### Suspense Component Integration
+
+The project includes a custom `Suspense` component that seamlessly integrates with the RPC client to handle loading, error, and data states. The component:
+
+- Automatically manages loading states with customizable loading indicators
+- Handles error states with user-defined error UI
+- Renders data when available
+- Provides type-safe integration with RPC callers
+
+Example usage:
+
+```svelte
+<script lang="ts">
+	import { callRpc } from '$lib/global/rpc/call-rpc.svelte';
+	import Suspense from '$lib/components/suspense.svelte';
+
+	const result = callRpc({
+		keys: () => ['users'],
+		fn: async () => {
+			// Your RPC call implementation
+		}
+	});
+</script>
+
+<Suspense data={result}>
+	{#snippet error()}
+		<div>Error occurred: {error.message}</div>
+	{/snippet}
+	{#snippet loading()}
+		<div>Loading...</div>
+	{/snippet}
+	{#snippet children(data)}
+		<div>Success: {data}</div>
+	{/snippet}
+</Suspense>
 ```
 
-## Building
+## Getting Started
 
-To create a production version of your app:
+1. Use as Template and Clone your repository
+2. Install dependencies:
+   ```bash
+   bun install
+   # or
+   npm install
+   ```
+3. Start the development server:
+   ```bash
+   bun run dev
+   # or
+   npm run dev
+   ```
 
-```bash
-npm run build
-```
+## Development
 
-You can preview the production build with `npm run preview`.
+The project is set up with modern development tools:
 
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+- TypeScript for type safety
+- Prettier for code formatting
+- ESLint for code linting
+- Vite for fast development server
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details

@@ -1,7 +1,7 @@
 import { users } from '$lib/users';
 import { getCookie } from 'hono/cookie';
 import { createMiddleware } from 'hono/factory';
-export const setUserMiddleware = createMiddleware<Env>(async (c, next) => {
+export const authMiddleware = createMiddleware<Env>(async (c, next) => {
 	const sessionCookie = getCookie(c, 'session');
 	if (!sessionCookie) {
 		c.set('user', null);
